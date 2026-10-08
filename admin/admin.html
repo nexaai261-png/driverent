@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - DriveRent</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="brand">Drive<span>Rent</span> Admin</div>
+    <div class="who" id="adminEmail"></div>
+    <nav id="sideNav">
+      <a data-page="dashboard">Dashboard</a>
+      <a data-page="orders">Pemesanan <span class="count" id="badgeOrders" hidden></span></a>
+      <a data-page="cars">Mobil</a>
+      <a data-page="customers">Pelanggan</a>
+      <a data-page="status">Status Peminjaman</a>
+      <a data-page="reports">Laporan</a>
+      <a data-page="settings">Pengaturan</a>
+    </nav>
+    <button class="btn ghost logout" id="btnLogout">Keluar</button>
+  </aside>
+  <div id="overlay"></div>
+
+  <div class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button id="burger" aria-label="Buka menu">&#9776;</button>
+      <h1 id="pageTitle">Dashboard</h1>
+      <a class="btn ghost dark sm site-link" id="siteLink" href="../index.html" target="_blank" rel="noopener">Lihat Website</a>
+      <div class="bellwrap">
+        <button id="bell" aria-label="Notifikasi pesanan baru">&#128276;<span class="count" id="bellCount" hidden></span></button>
+        <div id="bellPanel" hidden></div>
+      </div>
+    </header>
+
+    <main>
+      <!-- DASHBOARD -->
+      <section class="page" id="page-dashboard">
+        <div class="stats" id="stats"></div>
+        <div class="card">
+          <div class="card-head"><h2>Pesanan Terbaru</h2><button class="btn ghost dark sm" data-page="orders">Lihat semua</button></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nomor Pesanan</th><th>Nama Pelanggan</th><th>Mobil</th><th>Tanggal Sewa</th><th>Lama Sewa</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="recentBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PEMESANAN -->
+      <section class="page" id="page-orders">
+        <div class="card pad toolbar">
+          <div class="field grow"><label for="oSearch">Cari pesanan</label><input id="oSearch" placeholder="Nomor pesanan, nama pelanggan, atau nomor HP"></div>
+          <div class="field"><label for="oFilter">Status</label>
+            <select id="oFilter">
+              <option value="">Semua</option>
+              <option value="created">Pesanan Dibuat</option>
+              <option value="processing">Sedang Diproses</option>
+              <option value="approved">Disetujui</option>
+              <option value="ongoing">Sedang Berlangsung</option>
+              <option value="completed">Selesai</option>
+              <option value="rejected">Ditolak</option>
+            </select></div>
+        </div>
+        <p class="muted" id="oCount"></p>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>No</th><th>Nomor Pesanan</th><th>Pelanggan</th><th>Mobil</th><th>Tanggal Mulai</th><th>Tanggal Selesai</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody id="ordersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- DETAIL PESANAN -->
+      <section class="page" id="page-order-detail">
+        <button class="btn ghost dark sm back" data-page="orders">&larr; Kembali ke daftar pemesanan</button>
+        <div id="detailBox"></div>
+      </section>
+
+      <!-- MOBIL -->
+      <section class="page" id="page-cars">
+        <div class="page-head"><p class="muted">Perubahan di sini langsung terlihat di website pelanggan.</p><button class="btn gold" data-act="car-add">Tambah Mobil</button></div>
+        <div class="cars-grid" id="adminCars"></div>
+      </section>
+
+      <!-- PELANGGAN -->
+      <section class="page" id="page-customers">
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nama</th><th>Nomor HP</th><th>Email</th><th>Jumlah Pesanan</th><th>Pesanan Terakhir</th><th>Status</th></tr></thead>
+              <tbody id="customersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATUS PEMINJAMAN -->
+      <section class="page" id="page-status">
+        <p class="muted">Pantau semua pesanan berdasarkan tahap. Klik kartu untuk melihat detail.</p>
+        <div class="board" id="board"></div>
+      </section>
+
+      <!-- LAPORAN -->
+      <section class="page" id="page-reports">
+        <div class="page-head noprint">
+          <div class="seg" id="rangeBtns">
+            <button data-act="range" data-range="today">Hari ini</button>
+            <button data-act="range" data-range="week">Minggu ini</button>
+            <button data-act="range" data-range="month">Bulan ini</button>
+            <button data-act="range" data-range="all">Semua</button>
+          </div>
+          <button class="btn navy" data-act="print">Cetak Laporan</button>
+        </div>
+        <div class="print-head" id="printHead"></div>
+        <div class="stats four" id="reportStats"></div>
+        <p class="muted" id="reportNote"></p>
+        <div class="card">
+          <div class="card-head"><h2>Transaksi</h2></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>No</th><th>Nomor Pesanan</th><th>Tanggal Pesan</th><th>Pelanggan</th><th>Mobil</th><th>Lama Sewa</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody id="reportBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PENGATURAN -->
+      <section class="page" id="page-settings">
+        <div class="card pad">
+          <h2>Data uji coba</h2>
+          <p class="muted" id="dataInfo"></p>
+          <p class="muted">Tombol di bawah menghapus data sungguhan. Pakai hanya saat uji coba, sebelum website dipakai pelanggan.</p>
+          <div class="row">
+            <button class="btn navy" data-act="setting" data-do="demo">Muat data contoh</button>
+            <button class="btn ghost dark" data-act="setting" data-do="clear">Hapus semua pesanan</button>
+            <button class="btn danger" data-act="setting" data-do="reset">Reset semua data</button>
+          </div>
+        </div>
+        <div class="card pad">
+          <h2>Tentang sistem</h2>
+          <p class="muted">Data pesanan dan mobil disimpan di database Supabase, sehingga website pelanggan dan admin membaca data yang sama dari perangkat mana pun.</p>
+          <p class="muted">Login admin memakai Supabase Auth. Akun admin dibuat dan dikelola di dashboard Supabase (Authentication &gt; Users).</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <h3 id="mTitle"></h3>
+    <div id="mBody"></div>
+    <div class="modal-actions" id="mActions"></div>
+  </div>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

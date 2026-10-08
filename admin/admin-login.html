@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login Admin - DriveRent</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-body">
+<form id="loginForm" class="card login" novalidate>
+  <div class="brand dark">Drive<span>Rent</span> Admin</div>
+  <p class="muted">Masuk untuk mengelola pemesanan.</p>
+  <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="username"></div>
+  <div class="field"><label for="pass">Password</label><input id="pass" type="password" autocomplete="current-password"></div>
+  <small class="err" id="err"></small>
+  <button class="btn gold full" id="btnLogin" type="submit">Masuk</button>
+  <p class="note">Akun admin dibuat di dashboard Supabase (Authentication &gt; Users). Lupa password? Atur ulang dari sana.</p>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+(function () {
+  var CFG = window.DR_CONFIG || {};
+  var ok = CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY && !/^ISI_/.test(CFG.SUPABASE_URL) && !/^ISI_/.test(CFG.SUPABASE_ANON_KEY);
+  var err = document.getElementById("err");
+  if (!ok || !window.supabase) {
+    err.textContent = "Belum terhubung ke database. Isi config.js terlebih dahulu.";
+    document.getElementById("btnLogin").disabled = true;
+    return;
+  }
+  var sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+
+  // Sudah login? Langsung ke dashboard.
+  sb.auth.getSession().then(function (r) {
+    if (r.data && r.data.session) location.replace("admin.html");
+  });
+
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = document.getElementById("email").value.trim();
+    var pass = document.getElementById("pass").value;
+    err.textContent = "";
+    if (!email || !pass) { err.textContent = "Isi email dan password."; return; }
+    var btn = document.getElementById("btnLogin");
+    btn.disabled = true; btn.textContent = "Memeriksa...";
+    sb.auth.signInWithPassword({ email: email, password: pass }).then(function (r) {
+      if (r.error) {
+        btn.disabled = false; btn.textContent = "Masuk";
+        err.textContent = /fetch|network/i.test(r.error.message) ? "Tidak dapat terhubung ke server." : "Email atau password salah.";
+        return;
+      }
+      location.replace("admin.html");
+    });
+  });
+})();
+</script>
+</body>
+</html>

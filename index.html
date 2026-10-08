@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DriveRent - Rental Mobil</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="logo" data-go="home">Drive<span>Rent</span></a>
+    <button id="burger" aria-label="Buka menu">&#9776;</button>
+    <nav id="menu">
+      <a data-go="home">Beranda</a>
+      <a data-go="cars">Daftar Mobil</a>
+      <a data-go="search">Pencarian</a>
+      <a data-go="status">Status</a>
+      <a data-go="contact">Kontak</a>
+      <button class="btn gold" data-go="form">Sewa Sekarang</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HALAMAN 1: BERANDA -->
+  <section class="page" id="page-home">
+    <div class="hero">
+      <div class="wrap hero-in">
+        <div class="hero-text">
+          <h1>Temukan Mobil yang Tepat untuk Perjalananmu</h1>
+          <p>Sewa mobil dengan mudah, nyaman, aman, dan harga transparan.</p>
+          <div class="row">
+            <button class="btn gold" data-go="cars">Jelajahi Mobil</button>
+            <button class="btn ghost" data-go="form">Mulai Sewa</button>
+          </div>
+        </div>
+        <img id="heroImg" alt="Mobil rental DriveRent">
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="grid feats">
+        <div class="card feat"><b>Mobil Terawat</b><p>Servis rutin dan dibersihkan sebelum setiap penyewaan.</p></div>
+        <div class="card feat"><b>Harga Transparan</b><p>Tanpa biaya tersembunyi. Total terlihat sebelum konfirmasi.</p></div>
+        <div class="card feat"><b>Proses Mudah</b><p>Isi form, konfirmasi, dan pantau status pesananmu.</p></div>
+        <div class="card feat"><b>Pelayanan Terpercaya</b><p>Tim kami siap membantu setiap hari.</p></div>
+      </div>
+      <h2 class="title">Pilihan Mobil Populer</h2>
+      <div class="grid cars" id="popularGrid"></div>
+    </div>
+  </section>
+
+  <!-- HALAMAN 2: DAFTAR MOBIL -->
+  <section class="page" id="page-cars">
+    <div class="wrap">
+      <h2 class="title">Daftar Mobil</h2>
+      <div class="grid cars" id="carsGrid"></div>
+    </div>
+  </section>
+
+  <!-- HALAMAN 3: PENCARIAN -->
+  <section class="page" id="page-search">
+    <div class="wrap">
+      <h2 class="title">Pencarian Mobil</h2>
+      <div class="card filters">
+        <div class="field"><label for="fName">Nama mobil</label><input id="fName" placeholder="mis. Avanza"></div>
+        <div class="field"><label for="fType">Jenis</label>
+          <select id="fType"><option value="">Semua jenis</option><option>City Car</option><option>MPV</option><option>SUV</option><option>Sedan</option></select></div>
+        <div class="field"><label for="fSeat">Kapasitas</label>
+          <select id="fSeat"><option value="">Semua</option><option value="5">5 orang</option><option value="7">7 orang</option></select></div>
+        <div class="field"><label for="fMin">Harga minimum</label><input id="fMin" type="number" min="0" placeholder="0"></div>
+        <div class="field"><label for="fMax">Harga maksimum</label><input id="fMax" type="number" min="0" placeholder="1000000"></div>
+        <div class="row end">
+          <button class="btn navy" id="btnSearch">Cari</button>
+          <button class="btn ghost dark" id="btnReset">Reset</button>
+        </div>
+      </div>
+      <p id="resultInfo" class="muted"></p>
+      <div class="grid cars" id="searchGrid"></div>
+    </div>
+  </section>
+
+  <!-- HALAMAN 4: DETAIL MOBIL -->
+  <section class="page" id="page-detail">
+    <div class="wrap"><button class="btn ghost dark back" data-back>&larr; Kembali</button><div id="detailBox"></div></div>
+  </section>
+
+  <!-- HALAMAN 5: FORM PEMINJAMAN -->
+  <section class="page" id="page-form">
+    <div class="wrap narrow">
+      <h2 class="title">Form Peminjaman</h2>
+      <form id="rentForm" class="card pad" novalidate>
+        <div class="two">
+          <div class="field"><label for="name">Nama pelanggan</label><input id="name" autocomplete="name"><small class="err"></small></div>
+          <div class="field"><label for="phone">Nomor HP</label><input id="phone" inputmode="tel" placeholder="08123456789"><small class="err"></small></div>
+          <div class="field"><label for="email">Email</label><input id="email" type="email"><small class="err"></small></div>
+          <div class="field"><label for="car">Pilihan mobil</label><select id="car"></select><small class="err"></small></div>
+          <div class="field"><label for="start">Tanggal mulai sewa</label><input id="start" type="date"><small class="err"></small></div>
+          <div class="field"><label for="end">Tanggal selesai sewa</label><input id="end" type="date"><small class="err"></small></div>
+          <div class="field"><label for="days">Lama sewa</label><input id="days" readonly value="-"></div>
+        </div>
+        <div class="field"><label>Layanan tambahan</label><div id="addons" class="addons"></div></div>
+        <div class="estimate">Estimasi total: <b id="estimate">Rp0</b></div>
+        <button class="btn gold full" type="submit">Lanjut ke Pemesanan</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- HALAMAN 6: PEMESANAN -->
+  <section class="page" id="page-order">
+    <div class="wrap narrow"><h2 class="title">Pemesanan</h2><div id="orderBox"></div></div>
+  </section>
+
+  <!-- HALAMAN 7: STATUS -->
+  <section class="page" id="page-status">
+    <div class="wrap narrow">
+      <h2 class="title">Status Peminjaman</h2>
+      <div class="card pad">
+        <div class="field"><label for="orderNo">Nomor pemesanan</label>
+          <div class="row"><input id="orderNo" placeholder="Masukkan nomor pemesanan, mis. DR-1234"><button class="btn navy" id="btnCheck">Cek Status</button></div></div>
+        <div id="myOrders" class="chips"></div>
+        <div id="statusBox"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HALAMAN 8: KONTAK -->
+  <section class="page" id="page-contact">
+    <div class="wrap">
+      <h2 class="title">Kontak</h2>
+      <div class="two contact">
+        <div class="card pad">
+          <p><b>Alamat</b><br>Jl. Raya Contoh No. 12, Sidoarjo, Jawa Timur</p>
+          <p><b>WhatsApp</b><br>+62 812-3456-7890</p>
+          <p><b>Email</b><br>halo@driverent.example</p>
+          <p><b>Jam operasional</b><br>Setiap hari, 07.00 - 21.00 WIB</p>
+          <a class="btn gold" target="_blank" rel="noopener" href="https://wa.me/6281234567890?text=Halo%20DriveRent%2C%20saya%20ingin%20menyewa%20mobil">Hubungi via WhatsApp</a>
+        </div>
+        <div class="card map">Google Maps placeholder<br><small>Tempelkan iframe peta di sini</small></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="wrap fgrid">
+    <div><a class="logo" data-go="home">Drive<span>Rent</span></a><p>Rental mobil yang praktis, terawat, dan transparan untuk perjalanan harian maupun liburan.</p></div>
+    <div><b>Menu</b><a data-go="home">Beranda</a><a data-go="cars">Daftar Mobil</a><a data-go="search">Pencarian</a><a data-go="status">Status Peminjaman</a></div>
+    <div><b>Kontak</b><a data-go="contact">Halaman Kontak</a><span>+62 812-3456-7890</span><span>halo@driverent.example</span></div>
+  </div>
+  <div class="copy">&copy; 2026 DriveRent. Proyek demo sekolah. <a id="adminLink" href="admin/admin-login.html" style="text-decoration:underline">Login admin</a></div>
+</footer>
+
+<div id="toast" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
